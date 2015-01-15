@@ -16,8 +16,17 @@ class Point:
     else:
       self._y = y
 
+  def __str__(self):
+    return '<' + (str(self._x) + ',' + str(self._y)) + '>'
+
   def __add__(self, other):
     return Point(self._x + other._x, self._y + other._y)
 
   def __sub__(self, other):
     return Point(self._x - other._x, self._y - other._y)
+
+  def __mul__(self, other):
+    return Point(self._x * other._x, self._y * other._y)
+
+  def __div__ (self, other):
+    return Point (self._x / other._x, self._y / other._y)
