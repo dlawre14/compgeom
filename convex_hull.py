@@ -8,13 +8,13 @@ from fractions import Fraction
 
 #todo
 
-rands = utils.pointsInCircle(5,10,321)
+rands = utils.pointsInCircle(50,100,(100,100),321)
 points = []
 
 for x,y in rands:
   points.append(Point(x,y))
 
-points.append(Point(Fraction(3,4), Fraction(1,2)))
+canv = cs1.Canvas()
 
 for p in points:
-  print (p)
+  canv.add(cs1.Circle(2, cs1.Point(p.getFloatX(), p.getFloatY())))

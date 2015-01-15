@@ -16,6 +16,20 @@ class Point:
     else:
       self._y = y
 
+  def getX(self):
+    return self._x
+
+  def getY(self):
+    return self._y
+
+  def getFloatX(self):
+    '''This should not be used for math operations, only for graphical libraries requiring floating point numbers'''
+    return float(self._x)
+
+  def getFloatY(self):
+    '''This should not be used for math operations, only for graphical libraries requiring floating point numbers'''
+    return float(self._y)
+
   def __str__(self):
     return '<' + (str(self._x) + ',' + str(self._y)) + '>'
 
