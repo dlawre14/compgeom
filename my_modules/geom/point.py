@@ -1,4 +1,5 @@
 from fractions import Fraction
+import cs1graphics as cs1
 
 class Point:
 
@@ -29,6 +30,13 @@ class Point:
   def getFloatY(self):
     '''This should not be used for math operations, only for graphical libraries requiring floating point numbers'''
     return float(self._y)
+
+  def tocs1Point(self):
+    '''Used to make a cs1graphics point quickly'''
+    return cs1.Point(self.getFloatX(), self.getFloatY())
+
+  def __hash__(self):
+    return hash(self._x) + hash(self._y)
 
   def __str__(self):
     return '<' + (str(self._x) + ',' + str(self._y)) + '>'

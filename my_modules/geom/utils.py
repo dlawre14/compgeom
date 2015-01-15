@@ -1,6 +1,8 @@
 import random
 import math
 
+from my_modules.geom.point import Point
+
 class utils:
 
   @staticmethod
@@ -14,6 +16,6 @@ class utils:
       rad = rand.randrange(radius + 1)
       x = centerPt[0] + int(rad * math.cos(angle))
       y = centerPt[1] + int(rad * math.sin(angle))
-      points.append((x,y))
+      points.append(Point(x,y))
 
     return points

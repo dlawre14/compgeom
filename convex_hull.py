@@ -8,3 +8,7 @@ from my_modules.listeners.graphicslistener import GraphicsListener
 from fractions import Fraction
 
 l = GraphicsListener()
+p = utils.pointsInCircle(175, 500, (200,200), 5)
+
+for point in p:
+  l.pointAdded(point)
