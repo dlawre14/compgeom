@@ -9,10 +9,16 @@ from fractions import Fraction
 from operator import attrgetter
 
 l = GraphicsListener()
-p = utils.pointsInCircle(175, 25, (200,200))
+p = utils.pointsInCircle(175, 3, (200,200))
 
 for point in p:
   l.pointAdded(point)
 
-p = sorted(p, key=attrgetter('_x','_y'))
-l.setPointColor(p[0], 'green')
+l.setPointColor(p[0], 'red')
+l.setPointColor(p[1], 'green')
+l.setPointColor(p[2], 'blue')
+
+l.drawLine(p[0], p[1])
+l.drawLine(p[1], p[2])
+
+print (utils.pointDirection(p[0], p[1], p[2]))
