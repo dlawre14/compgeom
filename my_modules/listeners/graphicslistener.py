@@ -16,11 +16,13 @@ class GraphicsListener(Listener):
     self.points.append(point)
     self.pointObjects[point] = cs1.Circle(5, point.tocs1Point())
     self.pointObjects[point].setFillColor('black')
+    self.pointObjects[point].setDepth(1)
     self.canv.add(self.pointObjects[point])
 
   def setPointColor(self, point, color):
     if point in self.points:
       self.pointObjects[point].setFillColor(color)
+      self.pointObjects[point].setDepth(1)
     else:
       raise RuntimeError('Specified points not in active point set')
 
@@ -29,6 +31,7 @@ class GraphicsListener(Listener):
     if p1 in self.points and p2 in self.points:
       self.lineObjects[(p1,p2)] = cs1.Path(p1.tocs1Point(), p2.tocs1Point())
       self.lineObjects[(p1,p2)].setBorderWidth(2)
+      self.lineObjects[(p1,p2)].setDepth(1)
       self.canv.add(self.lineObjects[(p1,p2)])
 
     else:
@@ -38,7 +41,7 @@ class GraphicsListener(Listener):
     if p1 in self.points and p2 in self.points:
       self.canv.remove(self.lineObjects[(p1,p2)])
       del self.lineObjects[(p1,p2)]
-      
+
     else:
       raise RuntimeError('Specified points not in active point set')
 
@@ -50,4 +53,15 @@ class GraphicsListener(Listener):
         raise RuntimeError('Specified points not in active point set')
     self.polyObjects[pointList] = cs1.Path([x.tocs1Point() for x in pointList])
     self.polyObjects[pointList].setBorderWidth(2)
+    self.polyObjects[pointList].setsetDepth(1)
+    self.canv.add(self.polyObjects[pointList])
+
+  def drawPolygon(self, pointList):
+    pointList = tuple(pointList)
+    for point in pointList:
+      if point not in self.points:
+        raise RuntimeError('Specified points not in active point set')
+    self.polyObjects[pointList] = cs1.Polygon([x.tocs1Point() for x in pointList])
+    self.polyObjects[pointList].setFillColor('yellow')
+    self.polyObjects[pointList].setDepth(2)
     self.canv.add(self.polyObjects[pointList])

@@ -38,8 +38,9 @@ def monotoneChain(points, listeners):
     topPoints.append(p)
     #draw calls here
 
+  points.reverse()
   for p in points:
-    while len(bottomPoints) >= 2 and utils.pointDirection(bottomPoints[-2], bottomPoints[-1], p) > 0:
+    while len(bottomPoints) >= 2 and utils.pointDirection(bottomPoints[-2], bottomPoints[-1], p) <= 0:
       #l.removeLine(bottomPoints[-2], bottomPoints[-1])
       bottomPoints.pop()
 
@@ -53,6 +54,11 @@ def monotoneChain(points, listeners):
   for p in bottomPoints:
     for l in listeners:
       l.setPointColor(p, 'blue')
+
+  edge = topPoints + bottomPoints
+
+  for l in listeners:
+    l.drawPolygon(edge)
 
 
 args = parser.parse_args()

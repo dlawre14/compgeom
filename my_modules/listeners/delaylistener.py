@@ -23,4 +23,10 @@ class DelayListener(Listener):
       sleep(self.delay)
 
   def setPointColor(self, point, color):
+    if self.delay < 0:
+      input()
+    else:
+      sleep(self.delay)
+
+  def drawPolygon (self, pointList):
     pass
