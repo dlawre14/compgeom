@@ -34,6 +34,15 @@ class GraphicsListener(Listener):
     else:
       raise RuntimeError('Specified points not in active point set')
 
+  def removeLine(self, p1, p2):
+    if p1 in self.points and p2 in self.points:
+      self.canv.remove(self.lineObjects[(p1,p2)])
+      del self.lineObjects[(p1,p2)]
+      
+    else:
+      raise RuntimeError('Specified points not in active point set')
+
+
   def drawPath(self, pointList):
     pointList = tuple(pointList)
     for point in pointList:

@@ -21,16 +21,39 @@ parser.add_argument ('-d', type=float, default=0, help='add a delay to the progr
 
 def monotoneChain(points, listeners):
   points = sorted(points, key=attrgetter('_x', '_y'))
-  print (points[0])
+  for l in listeners: l.setPointColor(points[0], 'green')
 
   edgePoints = []
   edgePoints.append(points[0])
-  points.pop(0)
 
-  topPoints = []
+
+  topPoints = [points[0]]
   bottomPoints = []
 
-  
+  for p in points:
+    while len(topPoints) >= 2 and utils.pointDirection(topPoints[-2], topPoints[-1], p) <= 0:
+      #l.removeLine(topPoints[-2], topPoints[-1])
+      topPoints.pop()
+
+    topPoints.append(p)
+    #draw calls here
+
+  for p in points:
+    while len(bottomPoints) >= 2 and utils.pointDirection(bottomPoints[-2], bottomPoints[-1], p) > 0:
+      #l.removeLine(bottomPoints[-2], bottomPoints[-1])
+      bottomPoints.pop()
+
+    bottomPoints.append(p)
+    #draw calls here
+
+  for p in topPoints:
+    for l in listeners:
+      l.setPointColor(p, 'red')
+
+  for p in bottomPoints:
+    for l in listeners:
+      l.setPointColor(p, 'blue')
+
 
 args = parser.parse_args()
 
@@ -42,7 +65,7 @@ if args.g:
 if args.d != 0:
   listeners.append(DelayListener(args.d))
 
-ps = utils.pointsInCircle(150, args.p, (200,200))
+ps = utils.pointsInCircle(150, args.p, (200,200), args.seed)
 
 for p in ps:
   for l in listeners:
