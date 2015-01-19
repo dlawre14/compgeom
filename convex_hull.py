@@ -23,29 +23,27 @@ def monotoneChain(points, listeners):
   points = sorted(points, key=attrgetter('_x', '_y'))
   for l in listeners: l.setPointColor(points[0], 'green')
 
-  edgePoints = []
-  edgePoints.append(points[0])
-
-
-  topPoints = [points[0]]
+  topPoints = []
   bottomPoints = []
 
   for p in points:
     while len(topPoints) >= 2 and utils.pointDirection(topPoints[-2], topPoints[-1], p) <= 0:
-      #l.removeLine(topPoints[-2], topPoints[-1])
+      for l in listeners: l.removeLine(topPoints[-2], topPoints[-1])
       topPoints.pop()
 
     topPoints.append(p)
-    #draw calls here
+    if len(topPoints) > 1:
+      for l in listeners: l.drawLine(topPoints[-2], topPoints[-1])
 
   points.reverse()
   for p in points:
     while len(bottomPoints) >= 2 and utils.pointDirection(bottomPoints[-2], bottomPoints[-1], p) <= 0:
-      #l.removeLine(bottomPoints[-2], bottomPoints[-1])
+      for l in listeners: l.removeLine(bottomPoints[-2], bottomPoints[-1])
       bottomPoints.pop()
 
     bottomPoints.append(p)
-    #draw calls here
+    if len(bottomPoints) > 1:
+      for l in listeners: l.drawLine(bottomPoints[-2], bottomPoints[-1])
 
   for p in topPoints:
     for l in listeners:
