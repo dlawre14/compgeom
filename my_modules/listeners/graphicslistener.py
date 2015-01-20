@@ -37,6 +37,13 @@ class GraphicsListener(Listener):
     else:
       raise RuntimeError('Specified points not in active point set')
 
+  def setLineColor(self, p1, p2, color):
+    if p1 in self.points and p2 in self.points:
+      self.lineObjects[(p1,p2)].setBorderColor(color)
+
+    else:
+      raise RuntimeError('Specified points not in active point set')
+
   def removeLine(self, p1, p2):
     if p1 in self.points and p2 in self.points:
       self.canv.remove(self.lineObjects[(p1,p2)])

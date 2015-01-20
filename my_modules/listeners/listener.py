@@ -6,3 +6,6 @@ class Listener:
 
   def __init__(self):
     pass
+
+  def addDelay(self):
+    pass

@@ -52,3 +52,6 @@ class Point:
 
   def __div__ (self, other):
     return Point (self._x / other._x, self._y / other._y)
+
+  def dotProduct(self, other): #might wish to ignore
+    return (self._x * other._x) + (self._y * other._y)

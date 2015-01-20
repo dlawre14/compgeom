@@ -7,6 +7,12 @@ class DelayListener(Listener):
   def __init__(self, delayAmt):
     self.delay = delayAmt
 
+  def addDelay(self):
+    if self.delay < 0:
+      input()
+    else:
+      sleep(self.delay)
+
   def pointAdded(self, point):
     pass
 
@@ -27,6 +33,9 @@ class DelayListener(Listener):
       input()
     else:
       sleep(self.delay)
+
+  def setLineColor(self, p1, p2, color):
+    pass
 
   def drawPolygon (self, pointList):
     pass
