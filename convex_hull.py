@@ -16,7 +16,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Suite of convex hull algorithms with optional graphical implementation')
 parser.add_argument ('-p', type=int, help='number of points to generate', required=True)
 parser.add_argument ('--seed', type=int, help='seed to use for random point generation')
-parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis', required=True)
+parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis, quick', required=True)
 parser.add_argument ('-g', action='store_true', default=False, help='add a graphical output to the program')
 parser.add_argument ('-v', action='store_true', default=False, help='add a text output to the program')
 parser.add_argument ('-d', type=float, default=0, help='add a delay to the program, -1 is for manual advance, > 0 is for a timed delay')
@@ -96,9 +96,46 @@ def jarvisMarch(points, listeners):
       notLooped = False
 
   for l in listeners:
-    l.drawPolygon(edge)    
+    l.drawPolygon(edge)
 
   return edge
+
+def quickHull(points, listeners):
+  leftmost = points[0]
+  rightmost = points[-1]
+  for p in points:
+    if p.getX() < leftmost.getX():
+      leftmost = p
+    if p.getX() > rightmost.getX():
+      rightmost = p
+
+  for l in listeners:
+    l.setPointColor(leftmost, 'green')
+    l.setPointColor(rightmost, 'green')
+    l.drawLine(leftmost, rightmost)
+
+  furthestUp = points[0]
+  furthestDown = points[0]
+
+  for p in points:
+    if utils.pointDirection(leftmost, rightmost, p) <= utils.pointDirection(leftmost, rightmost, furthestUp):
+      furthestUp = p
+
+    if utils.pointDirection(leftmost, rightmost, p) > utils.pointDirection(leftmost, rightmost, furthestDown):
+      furthestDown = p
+
+
+  for l in listeners:
+    l.drawLine(leftmost, furthestUp)
+    l.drawLine(rightmost, furthestUp)
+    l.setLineColor(leftmost, furthestUp, 'orange')
+    l.setLineColor(rightmost, furthestUp, 'orange')
+
+    l.drawLine(leftmost, furthestDown)
+    l.drawLine(rightmost, furthestDown)
+    l.setLineColor(leftmost, furthestDown, 'cyan')
+    l.setLineColor(rightmost, furthestDown, 'cyan')
+
 
 args = parser.parse_args()
 
@@ -120,5 +157,7 @@ if args.algorithm == 'monotone':
   monotoneChain(ps, listeners)
 elif args.algorithm == 'jarvis':
   jarvisMarch(ps, listeners)
+elif args.algorithm == 'quick':
+  quickHull(ps, listeners)
 else:
   raise RuntimeError('You have selected a non-existant algorithm')

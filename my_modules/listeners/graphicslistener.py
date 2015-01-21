@@ -69,6 +69,6 @@ class GraphicsListener(Listener):
       if point not in self.points:
         raise RuntimeError('Specified points not in active point set')
     self.polyObjects[pointList] = cs1.Polygon([x.tocs1Point() for x in pointList])
-    self.polyObjects[pointList].setFillColor('yellow')
+    self.polyObjects[pointList].setFillColor('bisque3')
     self.polyObjects[pointList].setDepth(2)
     self.canv.add(self.polyObjects[pointList])
