@@ -38,6 +38,9 @@ class Point:
   def __hash__(self):
     return hash(self._x) + hash(self._y)
 
+  def __eq__(self, other):
+    return (self._x == other._x) and (self._y == other._y)
+
   def __str__(self):
     return '<' + (str(self._x) + ',' + str(self._y)) + '>'
 
@@ -55,3 +58,14 @@ class Point:
 
   def dotProduct(self, other): #might wish to ignore
     return (self._x * other._x) + (self._y * other._y)
+
+  def leftOf(self, other):
+    '''returns true if self is left of other'''
+    if self == other:
+      return True #we'll call it true for now
+    elif self._x < other._x:
+      return True
+    elif self._x == other._x and self._y > other._y:
+      return True
+    else:
+      return False

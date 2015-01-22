@@ -65,7 +65,7 @@ def monotoneChain(points, listeners):
 def jarvisMarch(points, listeners):
   leftmost = points[0]
   for p in points:
-    if p.getX() < leftmost.getX():
+    if p.leftOf(leftmost):
       leftmost = p
 
   for l in listeners:
@@ -154,9 +154,9 @@ def quickHull(points, listeners):
   leftmost = points[0] #arbitrary
   rightmost = points[-1] #arbitrary
   for p in points:
-    if p.getX() < leftmost.getX():
+    if p.leftOf(leftmost):
       leftmost = p
-    if p.getX() > rightmost.getX():
+    if rightmost.leftOf(p):
       rightmost = p
 
   for l in listeners:
