@@ -83,12 +83,14 @@ def jarvisMarch(points, listeners):
         l.setLineColor(current, p, 'blue')
 
       #here we're checking directionality
-      if utils.pointDirection(current, best, p) < 0 and p not in edge:
+      if utils.pointDirection(current, best, p) < 0:
         best = p
 
       for l in listeners: l.removeLine(current, p)
 
     edge.append(best)
+    points.remove(best)
+
     print (edge)
     for l in listeners:
       l.setPointColor(best, 'orange')
