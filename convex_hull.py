@@ -101,8 +101,58 @@ def jarvisMarch(points, listeners):
   return edge
 
 def quickHull(points, listeners):
-  leftmost = points[0]
-  rightmost = points[-1]
+
+  def solve(ps, a, b):
+    if len(ps) < 1:
+      return ps
+
+    elif len(ps) < 2:
+      for l in listeners:
+        try:
+          l.removeLine(a,b)
+        except:
+          pass
+        try:
+          l.removeLine(b,a)
+        except:
+          pass
+
+        l.drawLine(a,ps[0])
+        l.drawLine(ps[0],b)
+
+
+    best = ps[0]
+
+    for p in ps:
+      if utils.pointDirection(a,b,p) > utils.pointDirection(a,b,best):
+        best = p
+
+    for l in listeners:
+      try:
+        l.removeLine(a,b)
+      except:
+        pass
+      l.drawLine(a,best)
+      l.drawLine(b,best)
+      l.setPointColor(best, 'orange')
+
+    points = []
+    points2 = []
+
+    ps.remove(best)
+
+    for p in ps:
+      if utils.pointDirection(a, best, p) >= 0:
+        points.append(p)
+
+      if utils.pointDirection(best, b, p) >= 0:
+        points2.append(p)
+
+    return solve(points, a, best) + [best] + solve(points2, best, b)
+
+
+  leftmost = points[0] #arbitrary
+  rightmost = points[-1] #arbitrary
   for p in points:
     if p.getX() < leftmost.getX():
       leftmost = p
@@ -114,28 +164,22 @@ def quickHull(points, listeners):
     l.setPointColor(rightmost, 'green')
     l.drawLine(leftmost, rightmost)
 
-  furthestUp = points[0]
-  furthestDown = points[0]
+  points.remove(leftmost)
+  points.remove(rightmost)
 
+  leftPoints = []
+  rightPoints = []
   for p in points:
-    if utils.pointDirection(leftmost, rightmost, p) <= utils.pointDirection(leftmost, rightmost, furthestUp):
-      furthestUp = p
+    if utils.pointDirection(leftmost, rightmost, p) >= 0:
+      for l in listeners: l.setPointColor(p, 'blue')
+      leftPoints.append(p)
+    else:
+      for l in listeners: l.setPointColor(p, 'red')
+      rightPoints.append(p)
 
-    if utils.pointDirection(leftmost, rightmost, p) > utils.pointDirection(leftmost, rightmost, furthestDown):
-      furthestDown = p
-
-
-  for l in listeners:
-    l.drawLine(leftmost, furthestUp)
-    l.drawLine(rightmost, furthestUp)
-    l.setLineColor(leftmost, furthestUp, 'orange')
-    l.setLineColor(rightmost, furthestUp, 'orange')
-
-    l.drawLine(leftmost, furthestDown)
-    l.drawLine(rightmost, furthestDown)
-    l.setLineColor(leftmost, furthestDown, 'cyan')
-    l.setLineColor(rightmost, furthestDown, 'cyan')
-
+  edge = [leftmost] + solve(leftPoints, leftmost, rightmost) + [rightmost] + solve(rightPoints, rightmost, leftmost)
+  for l in listeners: l.drawPolygon(edge)
+  return edge
 
 args = parser.parse_args()
 
