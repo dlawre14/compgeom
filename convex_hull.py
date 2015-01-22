@@ -16,7 +16,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Suite of convex hull algorithms with optional graphical implementation')
 parser.add_argument ('-p', type=int, help='number of points to generate', required=True)
 parser.add_argument ('--seed', type=int, help='seed to use for random point generation')
-parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis, quick', required=True)
+parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis, quick, divide', required=True)
 parser.add_argument ('-g', action='store_true', default=False, help='add a graphical output to the program')
 parser.add_argument ('-v', action='store_true', default=False, help='add a text output to the program')
 parser.add_argument ('-d', type=float, default=0, help='add a delay to the program, -1 is for manual advance, > 0 is for a timed delay')
@@ -83,13 +83,16 @@ def jarvisMarch(points, listeners):
         l.setLineColor(current, p, 'blue')
 
       #here we're checking directionality
-      if utils.pointDirection(current, best, p) < 0:
+      if utils.pointDirection(current, best, p) < 0 and p not in edge:
         best = p
 
       for l in listeners: l.removeLine(current, p)
 
     edge.append(best)
-    for l in listeners: l.drawLine(current, best)
+    print (edge)
+    for l in listeners:
+      l.setPointColor(best, 'orange')
+      l.drawLine(current, best)
     current = best
 
     if current == leftmost:
@@ -181,6 +184,15 @@ def quickHull(points, listeners):
   for l in listeners: l.drawPolygon(edge)
   return edge
 
+def divideAndConquer(points, listeners):
+
+  def stitch(p1, p2):
+    #stitch together two polygons
+    pass
+
+  if len(points <= 3):
+    return points
+
 args = parser.parse_args()
 
 listeners = []
@@ -203,5 +215,7 @@ elif args.algorithm == 'jarvis':
   jarvisMarch(ps, listeners)
 elif args.algorithm == 'quick':
   quickHull(ps, listeners)
+elif args.algorithm == 'divide':
+  divideAndConquer(ps, listeners)
 else:
   raise RuntimeError('You have selected a non-existant algorithm')

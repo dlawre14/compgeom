@@ -44,6 +44,9 @@ class Point:
   def __str__(self):
     return '<' + (str(self._x) + ',' + str(self._y)) + '>'
 
+  def __repr__(self):
+    return '<' + (str(self._x) + ',' + str(self._y)) + '>'
+
   def __add__(self, other):
     return Point(self._x + other._x, self._y + other._y)
 
