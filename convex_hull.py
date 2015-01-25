@@ -89,9 +89,8 @@ def jarvisMarch(points, listeners):
       for l in listeners: l.removeLine(current, p)
 
     edge.append(best)
-    points.remove(best)
+    points.remove(best) #should speed slightly
 
-    print (edge)
     for l in listeners:
       l.setPointColor(best, 'orange')
       l.drawLine(current, best)
@@ -135,6 +134,10 @@ def quickHull(points, listeners):
     for l in listeners:
       try:
         l.removeLine(a,b)
+      except:
+        pass
+      try:
+        l.removeLine(b,a)
       except:
         pass
       l.drawLine(a,best)

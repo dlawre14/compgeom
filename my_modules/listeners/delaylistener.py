@@ -29,10 +29,7 @@ class DelayListener(Listener):
       sleep(self.delay)
 
   def setPointColor(self, point, color):
-    if self.delay < 0:
-      input()
-    else:
-      sleep(self.delay)
+    pass
 
   def setLineColor(self, p1, p2, color):
     pass
