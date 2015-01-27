@@ -13,14 +13,6 @@ from time import sleep
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Suite of convex hull algorithms with optional graphical implementation')
-parser.add_argument ('-p', type=int, help='number of points to generate', required=True)
-parser.add_argument ('--seed', type=int, help='seed to use for random point generation')
-parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis, quick, divide', required=True)
-parser.add_argument ('-g', action='store_true', default=False, help='add a graphical output to the program')
-parser.add_argument ('-v', action='store_true', default=False, help='add a text output to the program')
-parser.add_argument ('-d', type=float, default=0, help='add a delay to the program, -1 is for manual advance, > 0 is for a timed delay')
-
 def monotoneChain(points, listeners):
   points = sorted(points, key=attrgetter('_x', '_y'))
   for l in listeners: l.setPointColor(points[0], 'green')
@@ -240,29 +232,39 @@ def divideAndConquer(points, listeners):
   #for l in listeners: l.drawLineNonSet(Point(avgPt.getX(), 10), Point(avgPt.getX(), 390))
   return stitch(subDivide(left), subDivide(right))
 
-args = parser.parse_args()
+if __name__ == '__main__':
 
-listeners = []
+  parser = argparse.ArgumentParser(description='Suite of convex hull algorithms with optional graphical implementation')
+  parser.add_argument ('-p', type=int, help='number of points to generate', required=True)
+  parser.add_argument ('--seed', type=int, help='seed to use for random point generation')
+  parser.add_argument ('-algorithm', type=str, help='algorithm to use, available options: monotone, jarvis, quick, divide', required=True)
+  parser.add_argument ('-g', action='store_true', default=False, help='add a graphical output to the program')
+  parser.add_argument ('-v', action='store_true', default=False, help='add a text output to the program')
+  parser.add_argument ('-d', type=float, default=0, help='add a delay to the program, -1 is for manual advance, > 0 is for a timed delay')
 
-if args.g:
-  listeners.append(GraphicsListener())
+  args = parser.parse_args()
 
-if args.d != 0:
-  listeners.append(DelayListener(args.d))
+  listeners = []
 
-ps = utils.pointsInCircle(150, args.p, (200,200), args.seed)
+  if args.g:
+    listeners.append(GraphicsListener())
 
-for p in ps:
-  for l in listeners:
-    l.pointAdded(p)
+  if args.d != 0:
+    listeners.append(DelayListener(args.d))
 
-if args.algorithm == 'monotone':
-  monotoneChain(ps, listeners)
-elif args.algorithm == 'jarvis':
-  jarvisMarch(ps, listeners)
-elif args.algorithm == 'quick':
-  quickHull(ps, listeners)
-elif args.algorithm == 'divide':
-  divideAndConquer(ps, listeners)
-else:
-  raise RuntimeError('You have selected a non-existant algorithm')
+  ps = utils.pointsInCircle(150, args.p, (200,200), args.seed)
+
+  for p in ps:
+    for l in listeners:
+      l.pointAdded(p)
+
+  if args.algorithm == 'monotone':
+    monotoneChain(ps, listeners)
+  elif args.algorithm == 'jarvis':
+    jarvisMarch(ps, listeners)
+  elif args.algorithm == 'quick':
+    quickHull(ps, listeners)
+  elif args.algorithm == 'divide':
+    divideAndConquer(ps, listeners)
+  else:
+    raise RuntimeError('You have selected a non-existant algorithm')

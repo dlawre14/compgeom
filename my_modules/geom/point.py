@@ -72,3 +72,13 @@ class Point:
       return True
     else:
       return False
+
+  def above(self, other):
+    if self == other:
+      return True
+    elif self._y < other._y:
+      return True #this is because of ordering in the plain
+    elif self._y == other._y and self._x < other._x:
+      return True
+    else:
+      return False

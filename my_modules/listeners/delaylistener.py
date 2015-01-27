@@ -34,5 +34,5 @@ class DelayListener(Listener):
   def setLineColor(self, p1, p2, color):
     pass
 
-  def drawPolygon (self, pointList):
+  def drawPolygon (self, pointList, color='bisque3'):
     pass

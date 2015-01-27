@@ -12,3 +12,6 @@ class Listener:
 
   def drawLineNonSet(self, p1, p2):
     pass
+
+  def pointRemoved(self, point):
+    pass

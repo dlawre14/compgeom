@@ -45,4 +45,7 @@ class utils:
   def polyTangents (p1, p2):
     '''Find tangents between two polygons p1 and p2'''
     '''This returns points defining the upper and lower tangent'''
-    pass
+
+    #TODO
+
+    return None

@@ -19,6 +19,13 @@ class GraphicsListener(Listener):
     self.pointObjects[point].setDepth(1)
     self.canv.add(self.pointObjects[point])
 
+  def pointRemoved(self, point):
+    if point in self.points:
+      self.canv.remove(self.pointObjects[point])
+      del self.pointObjects[point]
+    else:
+      raise RuntimeError('Specified point not in active point set')
+
   def setPointColor(self, point, color):
     if point in self.points:
       self.pointObjects[point].setFillColor(color)
@@ -71,12 +78,12 @@ class GraphicsListener(Listener):
     self.polyObjects[pointList].setsetDepth(1)
     self.canv.add(self.polyObjects[pointList])
 
-  def drawPolygon(self, pointList):
+  def drawPolygon(self, pointList, color='bisque3'):
     pointList = tuple(pointList)
     for point in pointList:
       if point not in self.points:
         raise RuntimeError('Specified points not in active point set')
     self.polyObjects[pointList] = cs1.Polygon([x.tocs1Point() for x in pointList])
-    self.polyObjects[pointList].setFillColor('bisque3')
+    self.polyObjects[pointList].setFillColor(color)
     self.polyObjects[pointList].setDepth(2)
     self.canv.add(self.polyObjects[pointList])
