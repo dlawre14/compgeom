@@ -37,6 +37,14 @@ class GraphicsListener(Listener):
     else:
       raise RuntimeError('Specified points not in active point set')
 
+  def drawLineNonSet(self, p1, p2):
+    '''Draw a line between any two points, even if unknown in set'''
+    self.lineObjects[(p1,p2)] = cs1.Path(p1.tocs1Point(), p2.tocs1Point())
+    self.lineObjects[(p1,p2)].setBorderWidth(2)
+    self.lineObjects[(p1,p2)].setDepth(1)
+    self.canv.add(self.lineObjects[(p1,p2)])
+
+
   def setLineColor(self, p1, p2, color):
     if p1 in self.points and p2 in self.points:
       self.lineObjects[(p1,p2)].setBorderColor(color)

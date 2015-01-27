@@ -1,7 +1,11 @@
 import random
 import math
 
-from my_modules.geom.point import Point
+#directory issues
+try:
+  from point import Point
+except:
+  from my_modules.geom.point import Point
 
 class utils:
   '''This class will only contain static methods'''
@@ -26,3 +30,19 @@ class utils:
     '''Checks if three points move clockwise'''
     '''returns < 0 for counterclockwise, > 0 for clockwise, and 0 for co-linear'''
     return ((p2.getX() - p1.getX()) * (p3.getY() - p1.getY())) - ((p2.getY() - p1.getY()) * (p3.getX() - p1.getX()))
+
+  @staticmethod
+  def averageCoord (ps):
+    '''Take a list of point and averages them'''
+    xSum = 0
+    ySum = 0
+    for p in ps:
+      xSum += p.getX()
+      ySum += p.getY()
+
+    return Point(xSum/len(ps), ySum/len(ps))
+
+  def polyTangents (p1, p2):
+    '''Find tangents between two polygons p1 and p2'''
+    '''This returns points defining the upper and lower tangent'''
+    pass

@@ -195,8 +195,50 @@ def divideAndConquer(points, listeners):
     #stitch together two polygons
     pass
 
-  if len(points <= 3):
+  def subDivide(ps):
+    #this is our recursive call
+    if len(ps) <= 3:
+      if len(ps) == 3:
+        for l in listeners: l.drawPolygon(ps)
+      if len(ps) == 2:
+        for l in listeners: l.drawLine(ps[0], ps[1])
+      return ps
+
+    left = []
+    right = []
+
+    avgPt = utils.averageCoord(ps)
+
+    for p in ps:
+      if p.leftOf(avgPt):
+        for l in listeners: l.setPointColor(p, 'orange')
+        left.append(p)
+      else:
+        for l in listeners: l.setPointColor(p, 'red')
+        right.append(p)
+
+    #for l in listeners: l.drawLineNonSet(Point(avgPt.getX(), 10), Point(avgPt.getX(), 390))
+    return stitch(subDivide(left), subDivide(right))
+
+
+  if len(points) <= 3:
     return points
+
+  left = []
+  right = []
+
+  avgPt = utils.averageCoord(points)
+
+  for p in points:
+    if p.leftOf(avgPt):
+      for l in listeners: l.setPointColor(p, 'green')
+      left.append(p)
+    else:
+      for l in listeners: l.setPointColor(p, 'blue')
+      right.append(p)
+
+  #for l in listeners: l.drawLineNonSet(Point(avgPt.getX(), 10), Point(avgPt.getX(), 390))
+  return stitch(subDivide(left), subDivide(right))
 
 args = parser.parse_args()
 

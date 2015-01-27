@@ -9,3 +9,6 @@ class Listener:
 
   def addDelay(self):
     pass
+
+  def drawLineNonSet(self, p1, p2):
+    pass
