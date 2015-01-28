@@ -183,10 +183,6 @@ def quickHull(points, listeners):
 
 def divideAndConquer(points, listeners):
 
-  def stitch(p1, p2):
-    #stitch together two polygons
-    pass
-
   def subDivide(ps):
     #this is our recursive call
     if len(ps) <= 3:
@@ -229,8 +225,11 @@ def divideAndConquer(points, listeners):
       for l in listeners: l.setPointColor(p, 'blue')
       right.append(p)
 
-  #for l in listeners: l.drawLineNonSet(Point(avgPt.getX(), 10), Point(avgPt.getX(), 390))
-  return stitch(subDivide(left), subDivide(right))
+  #
+  # This is not complete
+  #
+  
+  return None
 
 if __name__ == '__main__':
 
