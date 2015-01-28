@@ -26,6 +26,10 @@ class GraphicsListener(Listener):
     else:
       raise RuntimeError('Specified point not in active point set')
 
+  def segmentAdded(self, segment):
+    self.pointAdded(segment.getP1())
+    self.pointAdded(segment.getP2())
+
   def setPointColor(self, point, color):
     if point in self.points:
       self.pointObjects[point].setFillColor(color)
@@ -43,6 +47,9 @@ class GraphicsListener(Listener):
 
     else:
       raise RuntimeError('Specified points not in active point set')
+
+  def drawSegment(self, segment):
+    self.drawLine(segment.getP1(), segment.getP2())
 
   def drawLineNonSet(self, p1, p2):
     '''Draw a line between any two points, even if unknown in set'''

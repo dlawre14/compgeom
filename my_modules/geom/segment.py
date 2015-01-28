@@ -13,7 +13,7 @@ class Segment:
     return self._p1
 
   def getP2(self):
-    return self._p1
+    return self._p2
 
   def getValueAtX(self, x):
     '''returns the coordinate value of the segment at x'''

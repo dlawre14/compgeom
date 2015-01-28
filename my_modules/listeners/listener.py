@@ -15,3 +15,9 @@ class Listener:
 
   def pointRemoved(self, point):
     pass
+
+  def drawSegment(self, segment):
+    pass
+
+  def segmentAdded(self, segment):
+    pass
