@@ -25,11 +25,28 @@ class utils:
 
     return points
 
+  def pointsInRectangle(width, height, numPoints, centerPt=Point(0,0), seed=None):
+    rand = random.Random(seed)
+    points = []
+    for i in range(numPoints):
+      points.append(Point(rand.randrange(-width,width+1), rand.randrange(-height,height+1)) + centerPt)
+
+    return points
+
   @staticmethod
   def pointDirection (p1,p2,p3):
     '''Checks if three points move clockwise'''
     '''returns < 0 for counterclockwise, > 0 for clockwise, and 0 for co-linear'''
     return ((p2.getX() - p1.getX()) * (p3.getY() - p1.getY())) - ((p2.getY() - p1.getY()) * (p3.getX() - p1.getX()))
+
+  @staticmethod
+  def directionRound(num):
+    if num > 0:
+      return 1
+    elif num < 0:
+      return -1
+    else:
+      return 0
 
   @staticmethod
   def averageCoord (ps):
