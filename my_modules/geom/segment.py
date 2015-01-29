@@ -15,6 +15,12 @@ class Segment:
     self._p1 = p1
     self._p2 = p2
 
+  def __str__(self):
+    return '{' + str(self._p1) + str(self._p2) + '}'
+
+  def __repr__(self):
+    return '{' + str(self._p1) + str(self._p2) + '}'
+
   def getP1(self):
     return self._p1
 
@@ -41,6 +47,13 @@ class Segment:
       x = (intercept - y) / slope
       return Point(x, y)
 
+  def leftOf(self, other, val):
+    '''is self left of other at given Y'''
+    if self.getValueAtY().getX() <= other.getValueAtY().getX():
+      return True
+    else:
+      return False
+
   def intersects(self, other):
     '''determines if a segment intersects another'''
     o1 = utils.pointDirection(self._p1, self._p2, other._p1)
@@ -49,9 +62,7 @@ class Segment:
     o4 = utils.pointDirection(other._p1, other._p2, self._p2)
 
     o = [o1,o2,o3,o4]
-    print (o)
     o = list(map(utils.directionRound, o))
-    print (o)
 
     if (o[0] != o[1] and o[2] != o[3]):
       return True
