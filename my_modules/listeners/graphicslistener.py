@@ -29,6 +29,7 @@ class GraphicsListener(Listener):
   def segmentAdded(self, segment):
     self.pointAdded(segment.getP1())
     self.pointAdded(segment.getP2())
+    self.drawSegment(segment)
 
   def setPointColor(self, point, color):
     if point in self.points:
