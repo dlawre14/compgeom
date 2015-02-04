@@ -29,7 +29,7 @@ class utils:
     rand = random.Random(seed)
     points = []
     for i in range(numPoints):
-      points.append(Point(rand.randrange(-width,width+1), rand.randrange(-height,height+1)) + centerPt)
+      points.append(Point(rand.randrange(-width//2,width//2+1), rand.randrange(-height//2,height//2+1)) + centerPt)
 
     return points
 
