@@ -1,5 +1,6 @@
 #Testing polygon tangent algorithm
 from my_modules.geom.point import Point
+from my_modules.geom.convexpoly import ConvexPolygon
 from my_modules.geom.utils import utils as utils
 
 from my_modules.listeners.graphicslistener import GraphicsListener
@@ -10,8 +11,8 @@ import convex_hull
 #define a left and right pointset
 listeners = [GraphicsListener()]
 
-leftSet = utils.pointsInCircle(80, 25, (100,200))
-rightSet = utils.pointsInCircle(80, 25, (300,200))
+leftSet = utils.pointsInCircle(80, 25, (100,200), 83)
+rightSet = utils.pointsInCircle(80, 25, (300,200), 94)
 
 for p in leftSet + rightSet:
   for l in listeners: l.pointAdded(p)
@@ -19,3 +20,8 @@ for p in leftSet + rightSet:
 #So we can see the seperate polygons
 leftPoly = convex_hull.quickHull(leftSet, listeners)
 rightPoly = convex_hull.quickHull(rightSet, listeners)
+
+leftPolygon = ConvexPolygon(leftPoly)
+rightPolygon = ConvexPolygon(rightPoly)
+
+mergePolygon = leftPolygon.merge(rightPolygon, listeners)

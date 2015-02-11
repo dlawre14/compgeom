@@ -40,6 +40,16 @@ class utils:
     return ((p2.getX() - p1.getX()) * (p3.getY() - p1.getY())) - ((p2.getY() - p1.getY()) * (p3.getX() - p1.getX()))
 
   @staticmethod
+  def ccw(p1,p2,p3):
+    dir = ((p2.getX() - p1.getX()) * (p3.getY() - p1.getY())) - ((p2.getY() - p1.getY()) * (p3.getX() - p1.getX()))
+    if dir > 0:
+        return 1
+    elif dir < 0:
+        return -1
+    else:
+        return 0
+
+  @staticmethod
   def directionRound(num):
     if num > 0:
       return 1
