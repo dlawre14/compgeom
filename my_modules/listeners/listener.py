@@ -21,3 +21,15 @@ class Listener:
 
   def segmentAdded(self, segment):
     pass
+
+  def drawSegmentNonSet(self, segment):
+    pass
+
+  def setSegmentColor(self, segment, color='red'):
+    pass
+
+  def removeSegment(self, segment):
+    pass
+
+  def setPointColor(self, point, color):
+    pass

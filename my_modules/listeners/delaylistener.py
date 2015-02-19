@@ -12,27 +12,3 @@ class DelayListener(Listener):
       input()
     else:
       sleep(self.delay)
-
-  def pointAdded(self, point):
-    pass
-
-  def drawLine(self, p1, p2):
-    if self.delay < 0:
-      input()
-    else:
-      sleep(self.delay)
-
-  def removeLine(self, p1, p2):
-    if self.delay < 0:
-      input()
-    else:
-      sleep(self.delay)
-
-  def setPointColor(self, point, color):
-    pass
-
-  def setLineColor(self, p1, p2, color):
-    pass
-
-  def drawPolygon (self, pointList, color='bisque3'):
-    pass

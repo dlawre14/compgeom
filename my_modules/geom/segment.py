@@ -21,11 +21,29 @@ class Segment:
   def __repr__(self):
     return '{' + str(self._p1) + str(self._p2) + '}'
 
+  def __contains__(self, a):
+      if self._p1 == a or self._p2 == a:
+          return True
+      else:
+          return False
+
   def getP1(self):
     return self._p1
 
   def getP2(self):
     return self._p2
+
+  def getStartY(self):
+      if self._p1.getY() < self._p2.getY():
+          return self._p1
+      else:
+          return self._p2
+
+  def getEndY(self):
+      if self._p1.getY() < self._p2.getY():
+          return self._p2
+      else:
+          return self._p1
 
   def getValueAtX(self, x):
     '''returns the coordinate value of the segment at x'''

@@ -59,6 +59,8 @@ class GraphicsListener(Listener):
     self.lineObjects[(p1,p2)].setDepth(1)
     self.canv.add(self.lineObjects[(p1,p2)])
 
+  def drawSegmentNonSet(self, segment):
+      self.drawLineNonSet(segment.getP1(), segment.getP2())
 
   def setLineColor(self, p1, p2, color):
     if p1 in self.points and p2 in self.points:
@@ -66,6 +68,12 @@ class GraphicsListener(Listener):
 
     else:
       raise RuntimeError('Specified points not in active point set')
+
+  def setSegmentColor(self, segment, color='red'):
+      try:
+          self.lineObjects[(segment.getP1(), segment.getP2())].setBorderColor(color)
+      except:
+          raise RuntimeError('Segment not in active set')
 
   def removeLine(self, p1, p2):
     if p1 in self.points and p2 in self.points:
@@ -75,6 +83,12 @@ class GraphicsListener(Listener):
     else:
       raise RuntimeError('Specified points not in active point set')
 
+  def removeSegment(self, segment):
+      try:
+          self.canv.remove(self.lineObjects[(segment.getP1(), segment.getP2())])
+          del self.lineObjects[(segment.getP1(), segment.getP2())]
+      except:
+          raise RuntimeError('Segment not in active set')
 
   def drawPath(self, pointList):
     pointList = tuple(pointList)

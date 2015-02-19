@@ -25,6 +25,48 @@ class utils:
 
     return points
 
+  @staticmethod
+  def convexPolygon(radius, numPoints, centerPt=(0,0), seed=None):
+      rand = random.Random(seed)
+      points = []
+      for i in range(numPoints):
+          angle = rand.random() * math.pi * 2
+          x = centerPt[0] + int(radius * math.cos(angle)) + rand.randrange(radius/2)
+          y = centerPt[1] + int (radius * math.sin(angle)) + rand.randrange(radius/2)
+          points.append(Point(x,y))
+
+      #Need to sort points in a polygonal ordering
+      def less(a, b):
+        if a.getX() - centerPt[0] >= 0 and b.getX() - centerPt[0] < 0:
+              return True
+        if a.getX() - centerPt[0] < 0 and b.getX() - centerPt[0] >= 0:
+              return False
+        if a.getX() - centerPt[0] == 0 and b.getX() - centerPt[0] == 0:
+            if a.getY() - centerPt[1] >= 0 or b.getY() - centerPt[1] >= 0:
+              return a.getY() > b.getY()
+            return b.getY() > a.getY()
+
+        det = (a.getX() - centerPt[0]) * (b.getY() - centerPt[1]) - (b.getX() - centerPt[0]) * (a.getY() - centerPt[1])
+        if det < 0:
+            return True
+        if det >= 0: #just to make it easy
+            return False
+
+      #lazy bubble the points
+      swapped = True
+      i = 0
+      while swapped:
+          swapped = False
+          i+=1
+          for j in range(len(points) - i):
+              if (less(points[j], points[j+1])):
+                  temp = points[j+1]
+                  points[j+1] = points[j]
+                  points[j] = temp
+                  swapped = True
+
+      return points
+
   def pointsInRectangle(width, height, numPoints, centerPt=Point(0,0), seed=None):
     rand = random.Random(seed)
     points = []

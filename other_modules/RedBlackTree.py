@@ -46,7 +46,7 @@ class _BinarySearchTree:
 
         def isExternal(self):
             return self._left is self._right
-        
+
         def getKey(self):
             return self._key
 
@@ -73,7 +73,7 @@ class _BinarySearchTree:
             if not self.isExternal():
                 raise ValueError('this is not an external node')
             return self._left
-            
+
         def setData(self, data):
             self._left = self._right = data
 
@@ -92,7 +92,7 @@ class _BinarySearchTree:
                 return 'Internal with key %s'%str(self._key)
             else:
                 return 'External with key %s'%str(self._key)
-            
+
     #####################################################################
     class _Key:
         pass
@@ -101,7 +101,7 @@ class _BinarySearchTree:
     _maxKey = _Key()
     #####################################################################
 
-    
+
     def __init__(self,cmp=cmp):
         """Creates a new (empty) BinarySearchTree.
 
@@ -282,17 +282,17 @@ class _BinarySearchTree:
                             while temp.isInternal():
                                 temp = temp.getRight()
                             replacementKey = temp.getKey()
-                        
+
                         for node in path:
                             if node.getKey() == path[-1].getKey():
                                 node.setKey(replacementKey)
 
                     # now get rid of the leaf itself
                     self._removeLeaf(path)
-                    
+
         self._size -= len(results)
         return results,matchingKey,path
-    
+
 
     def remove(self, key):
         """Removes and returns arbitrary data value associated with given key.
@@ -381,7 +381,7 @@ class _BinarySearchTree:
         else:
             parent.setRight(child.getLeft())
             child.setLeft(parent)
-                
+
 
     def _tracePath(self, key):
         """Returns the list of visited nodes from the root down to and including the leaf.
@@ -405,7 +405,7 @@ class _BinarySearchTree:
 
     def processAll(self, operation, fromNode=None):
         """Visits all entries in order.
-        
+
         Operation is assumed to be a callable object that will be sent key and data as two parameters.
         """
         if fromNode is None:
@@ -459,7 +459,7 @@ def _test(emptytree,N,_DEBUG=0):
                 raise RuntimeError('entry %d reported as min, although %d expected'%(largest[0],N-1-count))
     if len(tree) != 0:
         raise RuntimeError('empty tree has wrong size')
-    
+
 
 def _identifyNephews(sibling, parent):
     if sibling == parent.getLeft():
@@ -511,10 +511,10 @@ class RedBlackTree(_BinarySearchTree):
             else:
                 color = 'red'
             return _BinarySearchTree._Node.__str__(self) + " and color %s"%color
-        
+
     #####################################################################
 
-    
+
     def _fixupInsert(self, path):
         path.pop()                    # end should be a leaf (black by default)
         if path:
@@ -580,7 +580,7 @@ class RedBlackTree(_BinarySearchTree):
                     grandparent = path[-3]
                 else:
                     grandparent = None
-                    
+
                 if sibling.isRed():
                     # our parent is a 3-node that we prefer to realign
                     if _DEBUG > 1: print("realigning red sibling")
@@ -651,7 +651,7 @@ class RedBlackTree(_BinarySearchTree):
                     else:
                         answer = leftDepth
         return answer
-    
+
 def _test(emptytree,N,_DEBUG=0):
     import random
     data = list(range(N)) * 2
@@ -681,7 +681,6 @@ def _test(emptytree,N,_DEBUG=0):
                 raise RuntimeError('entry %d reported as min, although %d expected'%(largest[0],N-1-count))
     if len(tree) != 0:
         raise RuntimeError('empty tree has wrong size')
-    
+
 if __name__ == '__main__':
     _test(RedBlackTree(), 10000, _DEBUG)
-    
