@@ -73,6 +73,9 @@ class Point:
     else:
       return False
 
+  def __gt__(self, other):
+      return  not self.above(other)
+
   def above(self, other):
     if self == other:
       return True

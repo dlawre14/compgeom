@@ -16,9 +16,18 @@ import argparse
 
 def segComp(a, b):
     global yval
-    print (yval)
 
-    return true
+    print ('----')
+    print ('\tx value of ' + str(a) + ' is ' + str(a.getValueAtY(yval).getX()))
+    print ('\tx value of ' + str(b) + ' is ' + str(b.getValueAtY(yval).getX()))
+    print ('----')
+
+    if a.getValueAtY(yval).getX() == b.getValueAtY(yval).getX():
+        return 0
+    elif a.getValueAtY(yval).getX() < b.getValueAtY(yval).getX():
+        return -1
+    else:
+        return 1
 
 def makeMonotone(segments, listeners=[]):
     global yval
@@ -35,14 +44,17 @@ def makeMonotone(segments, listeners=[]):
             points.append(s.getP2())
 
     points = sorted(points, key=attrgetter('_y', '_x'))
+    segments = sorted(segments, key=attrgetter('_p1','_p2'))
+
     helpers = {} #this is a dictionary keyed by segments and holding a tuple of (point, ismerge)
+    edges = [] #the set of all start edges and added diagonals
 
     for l in listeners:
         l.drawSegmentNonSet(Segment(Point(0,yval), Point(400,yval)))
         l.setSegmentColor(Segment(Point(0,yval), Point(400,yval)))
 
     for p in points:
-        for l in listeners: l.removeSegment(Segment(Point(0,yval), Point(400,yval)))
+        for l in listeners: l.removeSegment(Segment(Point(0,yval), Point(400, yval)))
         yval = p.getY()
 
         for l in listeners:
@@ -50,15 +62,15 @@ def makeMonotone(segments, listeners=[]):
             l.setSegmentColor(Segment(Point(0,yval), Point(400,yval)))
             l.addDelay()
 
+
         for s in segments:
-            if p in s and s.getStartY() is p:
-                for l in listeners:
-                    l.setPointColor(s.getStartY(), 'red')
-                    l.setPointColor(s.getEndY(), 'blue')
-        #get above
-
-
-        #get below
+            if p == s.getP1():
+                print ('Inserting: ' + str(s) + ', current point: ' + str(p))
+                sweepline.insert(s,s)
+            if p == s.getP2():
+                print ('Removing: ' + str(s) + ', current point: ' + str(p))
+                sweepline.remove(s)
+                for l in listeners: l.setSegmentColor(s, 'orange')
 
 
 
