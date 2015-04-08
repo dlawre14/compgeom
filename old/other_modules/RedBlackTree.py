@@ -219,6 +219,8 @@ class _BinarySearchTree:
 
     def insert(self, key, data=None):
         """Inserts a new element with given key and data."""
+        #print ('About to insert')
+        #self._dump()
         if self:
             path = self._tracePath(key)
             end = path[-1]
@@ -246,6 +248,8 @@ class _BinarySearchTree:
             path = [self._root]
             self._fixupInsert(path)
         self._size += 1
+        #print ('Ending to insert')
+        #self._dump()
 
 
     def _remove(self, key, all=False):
@@ -299,7 +303,11 @@ class _BinarySearchTree:
 
         Raises KeyError if not found.
         """
+        #print ('About to remove')
+        #self._dump()
         results,foundkey,path = self._remove(key)
+        #print ('Done to removing')
+        #self._dump()
         if len(results) == 0:
             raise KeyError('key not found: '+str(key))
         else:

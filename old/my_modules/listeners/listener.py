@@ -22,7 +22,7 @@ class Listener:
   def segmentAdded(self, segment):
     pass
 
-  def drawSegmentNonSet(self, segment):
+  def drawSegmentNonSet(self, segment, color='black'):
     pass
 
   def setSegmentColor(self, segment, color='red'):

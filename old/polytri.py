@@ -1,6 +1,7 @@
 #This is the code for triangulating polygons
 
 from other_modules import RedBlackTree as rbtree
+from my_modules.structures.trees.segmentTree import segmentTree as tree
 from my_modules.listeners.graphicslistener import GraphicsListener
 from my_modules.listeners.delaylistener import DelayListener
 from my_modules.geom.utils import utils
@@ -14,20 +15,42 @@ import convex_hull
 
 import argparse
 
-def segComp(a, b):
+def segCompOld(a, b):
     global yval
 
     print ('----')
     print ('\tx value of ' + str(a) + ' is ' + str(a.getValueAtY(yval).getX()))
     print ('\tx value of ' + str(b) + ' is ' + str(b.getValueAtY(yval).getX()))
-    print ('----')
 
-    if a.getValueAtY(yval).getX() == b.getValueAtY(yval).getX():
-        return 0
+    if a == b:
+        y = min(a.getP2().getY(), b.getP2)
+        answer = 0
     elif a.getValueAtY(yval).getX() < b.getValueAtY(yval).getX():
-        return -1
+        answer = -1
     else:
-        return 1
+        answer = 1
+    print ('Answer: ' + str(answer))
+    print ('----')
+    return answer
+
+def segComp(a, b):
+    if a == b:
+        answer = 0
+    elif a.getP1() == b.getP1():
+        y = min(a.getP2().getY(), b.getP2().getY())
+        answer =  -1 if (a.getValueAtY(y).getX() < b.getValueAtY(y).getX()) else 1
+    else:
+        y = max(a.getP1().getY(), b.getP1().getY())
+        answer =  -1 if (a.getValueAtY(y).getX() < b.getValueAtY(y).getX()) else 1
+
+    #print ('----')
+    #print ('\tx value of ' + str(a) + ' is ' + str(a.getValueAtY(yval).getX()))
+    #print ('\tx value of ' + str(b) + ' is ' + str(b.getValueAtY(yval).getX()))
+    #print ('Answer: ' + str(answer))
+    #print ('----')
+
+    return answer
+
 
 def makeMonotone(segments, listeners=[]):
     global yval
@@ -53,6 +76,8 @@ def makeMonotone(segments, listeners=[]):
         l.drawSegmentNonSet(Segment(Point(0,yval), Point(400,yval)))
         l.setSegmentColor(Segment(Point(0,yval), Point(400,yval)))
 
+    intree = [] #for testing
+
     for p in points:
         for l in listeners: l.removeSegment(Segment(Point(0,yval), Point(400, yval)))
         yval = p.getY()
@@ -62,18 +87,43 @@ def makeMonotone(segments, listeners=[]):
             l.setSegmentColor(Segment(Point(0,yval), Point(400,yval)))
             l.addDelay()
 
+        inserts = []
+        removes = []
 
         for s in segments:
-            if p == s.getP1():
-                print ('Inserting: ' + str(s) + ', current point: ' + str(p))
-                sweepline.insert(s,s)
             if p == s.getP2():
-                print ('Removing: ' + str(s) + ', current point: ' + str(p))
-                sweepline.remove(s)
-                for l in listeners: l.setSegmentColor(s, 'orange')
+                removes.append(s)
 
+            if p == s.getP1():
+                inserts.append(s)
 
+        for r in removes:
+            if helpers[r] not in r:
+                for l in listeners: l.drawSegmentNonSet(Segment(p, helpers[r]), 'orange')
+            sweepline.remove(r)
 
+        for i in inserts:
+            low = sweepline.findLow(i)
+            sweepline.insert(i)
+            if low:
+                low = low[0]
+                if helpers[low] not in low:
+                    for l in listeners: l.drawSegmentNonSet(Segment(p, helpers[low]), 'green')
+                helpers[low] = p
+            helpers[i] = p
+
+def triangulateMono(segments, listeners=[]):
+    points = []
+    for s in segments:
+        if s.getP1() not in points:
+            points.append(s.getP1())
+        if s.getP2() not in points:
+            points.append(s.getP2())
+
+    points = sorted(points, key=attrgetter('_x', '_y'))
+
+    for i in range(1,len(points)-1):
+        for l in listeners: l.drawSegmentNonSet(Segment(points[i],points[i+1]))
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Polygon triangulation with optional graphical implementation')
@@ -85,7 +135,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    ps = utils.convexPolygon(100, args.s, (200,200), args.seed)
+    #ps = utils.convexPolygon(100, args.s, (200,200), args.seed)
+    ps = utils.pointsInCircle(150, args.s, (200,200), args.seed)
+    ps = convex_hull.quickHull(ps, [])
 
     listeners = []
 
@@ -100,4 +152,8 @@ if __name__ == '__main__':
         segments.append(Segment(ps[i % len(ps)], ps[(i+1) % len(ps)]))
         for l in listeners: l.segmentAdded(segments[-1])
 
-    makeMonotone(segments, listeners)
+    for s in segments:
+        for l in listeners: l.segmentAdded(s)
+
+    #makeMonotone(segments, listeners)
+    triangulateMono(segments, listeners)

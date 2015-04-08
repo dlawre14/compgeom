@@ -59,8 +59,9 @@ class GraphicsListener(Listener):
     self.lineObjects[(p1,p2)].setDepth(1)
     self.canv.add(self.lineObjects[(p1,p2)])
 
-  def drawSegmentNonSet(self, segment):
+  def drawSegmentNonSet(self, segment, color = 'black'):
       self.drawLineNonSet(segment.getP1(), segment.getP2())
+      self.setSegmentColor(segment, color)
 
   def setLineColor(self, p1, p2, color):
     if p1 in self.points and p2 in self.points:

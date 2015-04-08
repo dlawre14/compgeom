@@ -63,15 +63,13 @@ class Segment:
 
   def getValueAtY(self, y):
       '''returns the coordinate value of the sement at y'''
-      if self._p1.getX()-self._p2.getX() == 0:
-          #perturb by epsilon
-          slope = abs(self._p1.getY() - self._p2.getY())/abs(self._p1.getX()-self._p2.getX()+Fraction(1,100000000))
+      #TODO change to not slope
+      if self._p1.getY() == self._p2.getY():
+          return self._p1
       else:
-          slope = abs(self._p1.getY() - self._p2.getY())/abs(self._p1.getX()-self._p2.getX())
-
-      intercept = self._p1.getY() - (slope * self._p1.getX())
-      x = (intercept - y) / slope
-      return Point(x, y)
+          t = (y - self._p1.getY())/(self._p2.getY() - self._p1.getY())
+          x = self._p1.getX() + t*(self._p2.getX() - self._p1.getX())
+          return Point(x, y)
 
   def leftOf(self, other, val):
     '''is self left of other at given Y'''
