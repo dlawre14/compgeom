@@ -1,4 +1,4 @@
-from my_modules.listeners.listener import Listener #since our algorithms run from the root
+from ..listeners.listener import Listener #since our algorithms run from the root
 import cs1graphics as cs1
 
 class GraphicsListener(Listener):
