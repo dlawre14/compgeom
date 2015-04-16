@@ -20,7 +20,32 @@ class Triangle:
 
     def pointInside(self, p):
         #Checks if p is in or on the triangle
-        return False
+        v0 = self._p2 - self._p1
+        v1 = self._p3 - self._p1
+        v2 = p - self._p1
+
+        d00 = v0*v0
+        d01 = v0*v1
+        d11 = v1*v1
+        d20 = v2*v0
+        d21 = v2*v1
+        denom = d00 * d11 - d01 * d01
+
+        v = (d11 * d20 - d01 * d21) / denom
+        w = (d00 * d21 - d01 * d20) /denom
+        u = 1 - v - w;
+
+        #If on edge, consider inside
+        if 0 <= v < 1 and 0 <= w < 1 and 0 <= u < 1:
+            return True
+        else:
+            return False
+
+    def __eq__(self, other):
+        if self._p1 == other._p1 and self._p2 == other._p2 and self._p3 == other._p3:
+            return True
+        else:
+            return False
 
 def computeDelaunay(points, listeners=[]):
     pass
@@ -34,9 +59,5 @@ if __name__ == '__main__':
 
     generator = RandomGeom(87)
     pts = generator.randPointSetInBall(10, Point.Point2D(100,100), 50)
-    print (pts)
 
-    dc = DCEL.buildSimplePolygon(pts)
-    temp = DCEL.renderDCEL(dc)
-    temp[0].moveTo(0,200)
-    canv.add(temp[0])
+    #TODO
