@@ -7,45 +7,18 @@ from modules.RandomGeom import RandomGeom
 from old.my_modules.listeners.delaylistener import DelayListener
 from old.my_modules.listeners.graphicslistener import GraphicsListener
 
-class Triangle:
+from triangle import Triangle
+from pointfinder import PointFinder
 
-    def __init__(self, p1, p2, p3):
-        self._p1 = p1
-        self._p2 = p2
-        self._p3 = p3
+from queue import Queue
 
-    def getPoints(self):
-        #return a tuple of the points defining the triangle
-        return (self._p1, self._p2, self._p3)
+#for easiness, returns a polygon
+def drawTri(triangle):
+    tri = cs1.Polygon(map(PointToCS, triangle.getPoints()))
+    return tri
 
-    def pointInside(self, p):
-        #Checks if p is in or on the triangle
-        v0 = self._p2 - self._p1
-        v1 = self._p3 - self._p1
-        v2 = p - self._p1
-
-        d00 = v0*v0
-        d01 = v0*v1
-        d11 = v1*v1
-        d20 = v2*v0
-        d21 = v2*v1
-        denom = d00 * d11 - d01 * d01
-
-        v = (d11 * d20 - d01 * d21) / denom
-        w = (d00 * d21 - d01 * d20) /denom
-        u = 1 - v - w;
-
-        #If on edge, consider inside
-        if 0 <= v < 1 and 0 <= w < 1 and 0 <= u < 1:
-            return True
-        else:
-            return False
-
-    def __eq__(self, other):
-        if self._p1 == other._p1 and self._p2 == other._p2 and self._p3 == other._p3:
-            return True
-        else:
-            return False
+def PointToCS(point):
+    return cs1Point(point.getX(), point.getY())
 
 def computeDelaunay(points, listeners=[]):
     pass
@@ -55,9 +28,52 @@ def computeDelaunay(points, listeners=[]):
 if __name__ == '__main__':
     #Do arg parsing at some point
     #listeners = [GraphicsListener(), DelayListener(0.25)]
-    canv = cs1.Canvas()
+    canv = cs1.Canvas(500,500)
 
-    generator = RandomGeom(87)
-    pts = generator.randPointSetInBall(10, Point.Point2D(100,100), 50)
+    #so we can color things
+    tris = {}
 
-    #TODO
+    #Create arbitrary bounding triangle
+    bounds = [Point.Point2D(250,5), Point.Point2D(10,490), Point.Point2D(490,490)]
+    bound = Triangle(bounds[0], bounds[1], bounds[2])
+
+    poly = drawTri(bound)
+    canv.add(poly)
+
+    tris[bound] = poly
+
+    event = 1
+
+    points = Queue()
+    finder = PointFinder()
+    finder.addTriangle(bound)
+
+    while event != None:
+        event = canv.wait()
+        if event.getDescription() == 'keyboard':
+            event = None
+        else:
+            p = event.getMouseLocation()
+            points.put(Point.Point2D(p.getX(), p.getY()))
+            canv.add(cs1.Circle(5,p))
+
+    while not points.empty():
+        p = points.get()
+        region = finder.findPoint(p)
+        ps = region.getTriangle().getPoints()
+
+        color = input('Set point region color: ')
+        tris[region.getTriangle()].setFillColor(color)
+
+        newtris = []
+        for i in range(len(ps)):
+            newtris.append(Triangle(ps[i], ps[(i+1) % 3], p))
+        for tri in newtris:
+            t = drawTri(tri)
+            canv.add(t)
+            tris[tri] = t
+            finder.addTriangle(tri, region)
+
+        input('Press enter to proceed with next point.')
+
+    canv.close()
